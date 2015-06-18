@@ -175,9 +175,52 @@ error_reporting( error_reporting() & ~E_WARNING );
 
 $connection = @mysql_connect('localhost', 'root', '') or die (mysql_error());
 @mysql_select_db('deltawebdev_task4', $connection) or die (mysql_error());	
-$number = mt_rand(100000000,9999999999);
- 
-$query = @mysql_query("INSERT INTO accounts (roll_number,your_name,department,year_of_study,email,password,random_number) VALUES ('".$safe_roll_number."','".$safe_your_name."','".$safe_department."','".$safe_year_of_study."','".$safe_email."','".$safe_password."','$number')");
+
+generate();
+while($sum_next!=0)
+{
+    generate();
+}
+$product=0;
+for($k=0;$k<9;$k++)
+	{
+	     $product=($product*10)+$number[$k];
+	}
+
+function generate() {
+global $number;
+$number = array("0","0","0","0","0","0","0","0","0");
+$number[0]= mt_rand(1,9);
+$number[1]= mt_rand(0,9);
+$number[2]= mt_rand(0,9);
+$number[3]= mt_rand(0,9);
+$number[4]= mt_rand(0,9);
+$number[5]= mt_rand(0,9);
+$number[6]= mt_rand(0,9);
+$number[7]= mt_rand(0,9);
+$number[8]= mt_rand(0,9);
+for($i=1;$i<8;$i=$i+2) 
+{
+    $number[$i]=$number[$i]*2;
+	if($number[$i]>9)
+	{
+	     $x=$number[$i]%10;
+		 $number[$i]=$number[$i]-$x;
+		 $y=$number[$i]/10;
+		 $number[$i]=$x+$y;
+	}
+}
+global $sum,$sum_next;
+$sum=0;$sum_next=0;
+
+for($j=0;$j<9;$j++)
+{
+    $sum=$sum+$number[$j];
+}
+$sum_next=$sum%10;
+}
+
+$query = @mysql_query("INSERT INTO accounts (roll_number,your_name,department,year_of_study,email,password,random_number) VALUES ('".$safe_roll_number."','".$safe_your_name."','".$safe_department."','".$safe_year_of_study."','".$safe_email."','".$safe_password."','$product')");
 
 if(isset($_POST['submit']))
 {   
