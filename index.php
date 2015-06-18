@@ -30,7 +30,7 @@ height: 25px;
 <body>
 <?php
 error_reporting( error_reporting() & ~E_DEPRECATED );
-$your_nameErr = $emailErr = $passwordErr = $roll_numberErr = $year_of_studyErr = $departmentErr = "";
+$your_nameErr = $emailErr = $passwordErr = $roll_numberErr = $year_of_studyErr = $captchaErr = $departmentErr = "";
 $your_name = $email = $password = $roll_number = $department = $year_of_study = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -74,6 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $department = test_input($_POST["department"]);
 	 $safe_department = mysql_real_escape_string($department);
    }
+   if (empty($_POST["captcha"])) {
+     $captchaErr = "Captcha is required";
+   } 
 }
 
 function test_input($data) {
@@ -93,13 +96,12 @@ Year of study : <span class="error">*<?php echo $year_of_studyErr;?></span><inpu
 Email : <span class="error">*<?php echo $emailErr;?></span><input align="center" type="text" name="email"></input>
 Password : <span class="error">*<?php echo $passwordErr;?></span><input align="center" type="password" name="password" id="password"></input>Click to display password<br><br><input  type="checkbox" onclick="checkbox()" style="margin: 0; padding 0;"></input><br><br>
 Photo : <span class="error">*</span><input type="file" name='image' id='image'></input>
-
 <script>
 var a=Math.floor(Math.random()*10);
 var b=Math.floor(Math.random()*10);
 var c=a+b;
 document.write(a);document.write("+");document.write(b);document.write("=");
-</script>
+</script><span class="error"> *<?php echo $captchaErr;?></span>
 <input type="text" name="captcha" id="captcha"/>
 <input align="center" type="submit" name="submit" value="Submit"></input><br>
 <form>
