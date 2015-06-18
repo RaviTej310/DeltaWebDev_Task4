@@ -29,6 +29,7 @@ height: 25px;
 </head>
 <body>
 <?php
+error_reporting( error_reporting() & ~E_DEPRECATED );
 $your_nameErr = $emailErr = $passwordErr = $roll_numberErr = $year_of_studyErr = $departmentErr = "";
 $your_name = $email = $password = $roll_number = $department = $year_of_study = "";
 
@@ -37,35 +38,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $your_nameErr = "Name is required";
    } else {
      $your_name = test_input($_POST["your_name"]);
+	 $safe_your_name = mysql_real_escape_string($your_name);
    }
    
    if (empty($_POST["email"])) {
      $emailErr = "Email is required";
    } else {
      $email = test_input($_POST["email"]);
+	 $safe_email = mysql_real_escape_string($email);
    }
      
    if (empty($_POST["password"])) {
      $passwordErr = "Password is required";
    } else {
      $password = sha1($_POST["password"]);
+	 $safe_password = mysql_real_escape_string($password);
    }
 
    if (empty($_POST["roll_number"])) {
      $roll_numberErr = "Roll number is required";
    } else {
      $roll_number = test_input($_POST["roll_number"]);
+	 $safe_roll_number = mysql_real_escape_string($roll_number);
    }
 
    if (empty($_POST["year_of_study"])) {
      $year_of_studyErr = "Year of study is required";
    } else {
      $year_of_study = test_input($_POST["year_of_study"]);
+	 $safe_year_of_study = mysql_real_escape_string($year_of_study);
    }
    if (empty($_POST["department"])) {
      $departmentErr = "Department is required";
    } else {
      $department = test_input($_POST["department"]);
+	 $safe_department = mysql_real_escape_string($department);
    }
 }
 
@@ -162,12 +169,13 @@ function validateForm() {
 </script>
 <?php
 error_reporting( error_reporting() & ~E_NOTICE );
-error_reporting( error_reporting() & ~E_WARNING ).
+error_reporting( error_reporting() & ~E_WARNING );
+
 $connection = @mysql_connect('localhost', 'root', '') or die (mysql_error());
 @mysql_select_db('deltawebdev_task4', $connection) or die (mysql_error());	
 $number = mt_rand(100000000,9999999999);
  
-$query = @mysql_query("INSERT INTO accounts (roll_number,your_name,department,year_of_study,email,password,random_number) VALUES ('$roll_number','$your_name','$department','$year_of_study','$email','$password','$number')");
+$query = @mysql_query("INSERT INTO accounts (roll_number,your_name,department,year_of_study,email,password,random_number) VALUES ('".$safe_roll_number."','".$safe_your_name."','".$safe_department."','".$safe_year_of_study."','".$safe_email."','".$safe_password."','$number')");
 
 if(isset($_POST['submit']))
 {   
