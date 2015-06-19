@@ -184,12 +184,14 @@ while($sum_next!=0)
 $product=0;
 for($k=0;$k<9;$k++)
 	{
-	     $product=($product*10)+$number[$k];
+	     $product=($product*10)+$final[$k];
 	}
 
 function generate() {
 global $number;
+global $final;
 $number = array("0","0","0","0","0","0","0","0","0");
+$final = array("0","0","0","0","0","0","0","0","0");
 $number[0]= mt_rand(1,9);
 $number[1]= mt_rand(0,9);
 $number[2]= mt_rand(0,9);
@@ -199,6 +201,10 @@ $number[5]= mt_rand(0,9);
 $number[6]= mt_rand(0,9);
 $number[7]= mt_rand(0,9);
 $number[8]= mt_rand(0,9);
+for($p=0;$p<9;$p++)
+{
+    $final[$p]=$number[$p];
+}
 for($i=1;$i<8;$i=$i+2) 
 {
     $number[$i]=$number[$i]*2;
