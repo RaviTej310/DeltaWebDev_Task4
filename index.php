@@ -32,7 +32,6 @@ height: 25px;
 error_reporting( error_reporting() & ~E_DEPRECATED );
 $your_nameErr = $emailErr = $passwordErr = $roll_numberErr = $year_of_studyErr = $captchaErr = $departmentErr = "";
 $your_name = $email = $password = $roll_number = $department = $year_of_study = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
    if (empty($_POST["your_name"])) {
      $your_nameErr = "Name is required";
@@ -54,14 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $password = sha1($_POST["password"]);
 	 $safe_password = mysql_real_escape_string($password);
    }
-
    if (empty($_POST["roll_number"])) {
      $roll_numberErr = "Roll number is required";
    } else {
      $roll_number = test_input($_POST["roll_number"]);
 	 $safe_roll_number = mysql_real_escape_string($roll_number);
    }
-
    if (empty($_POST["year_of_study"])) {
      $year_of_studyErr = "Year of study is required";
    } else {
@@ -73,18 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    } else {
      $department = test_input($_POST["department"]);
 	 $safe_department = mysql_real_escape_string($department);
-   }
-   if (empty($_POST["captcha"])) {
-     $captchaErr = "Captcha is required";
    } 
 }
-
 function test_input($data) {
    $data = trim($data);
    $data = htmlspecialchars($data);
    return $data;
 }
-
 ?>
 <br><span class="error">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Required fields</span><br><br><br>
 <div class="layout">
@@ -94,34 +86,23 @@ Name : <span class="error">*<?php echo $your_nameErr;?></span><input align="cent
 Department : <span class="error">*<?php echo $departmentErr;?></span><input align="center" type="text" name="department"></input>
 Year of study : <span class="error">*<?php echo $year_of_studyErr;?></span><input align="center" type="text" name="year_of_study"></input><br>
 Email : <span class="error">*<?php echo $emailErr;?></span><input align="center" type="text" name="email"></input>
-Password : <span class="error">*<?php echo $passwordErr;?></span><input align="center" type="password" name="password" id="password"></input>Click to display password<br><br><input  type="checkbox" onclick="checkbox()" style="margin: 0; padding 0;"></input><br><br>
+Password : <span class="error">*<?php echo $passwordErr;?></span><input align="center" type="password" name="password" id="password"></input>
+Click to display password<br><br><input type="checkbox" id="check" onclick="checkbox()" style="margin: 0; padding 0;"></input><br><br>
 Photo : <span class="error">*</span><input type="file" name='image' id='image'></input>
-<script>
-var a=Math.floor(Math.random()*10);
-var b=Math.floor(Math.random()*10);
-var c=a+b;
-document.write(a);document.write("+");document.write(b);document.write("=");
-</script><span class="error"> *<?php echo $captchaErr;?></span>
-<input type="text" name="captcha" id="captcha"/>
 <input align="center" type="submit" name="submit" value="Submit"></input><br>
 <form>
 </div>
 <script>
 function checkbox(obj) {
-  var obj = document.getElementById('password');
+  var obj=document.getElementById('password');
+  if(document.getElementById('check').checked)
   obj.type = "text";
+  else 
+  obj.type= "password";
 }
 </script>
 <script>
-
 function validateForm() {
-    var captcha=document.getElementById('captcha').value;
-	if (captcha==c ){}
-	else 
-	{
-	    alert("Captcha answer is incorrect. I think you're a robot.");
-		return false;
-	}
     var x = document.forms["myForm"]["roll_number"].value;
     if (x == null || x == "") {
         alert("Roll number must be filled out");
@@ -172,10 +153,8 @@ function validateForm() {
 <?php
 error_reporting( error_reporting() & ~E_NOTICE );
 error_reporting( error_reporting() & ~E_WARNING );
-
 $connection = @mysql_connect('localhost', 'root', '') or die (mysql_error());
 @mysql_select_db('deltawebdev_task4', $connection) or die (mysql_error());	
-
 generate();
 while($sum_next!=0)
 {
@@ -186,7 +165,6 @@ for($k=0;$k<11;$k++)
 	{
 	     $product=($product*10)+$final[$k];
 	}
-
 function generate() {
 global $number;
 global $final;
@@ -220,16 +198,13 @@ for($i=1;$i<10;$i=$i+2)
 }
 global $sum,$sum_next;
 $sum=0;$sum_next=0;
-
 for($j=0;$j<11;$j++)
 {
     $sum=$sum+$number[$j];
 }
 $sum_next=$sum%10;
 }
-
 $query = @mysql_query("INSERT INTO accounts (roll_number,your_name,department,year_of_study,email,password,random_number) VALUES ('".$safe_roll_number."','".$safe_your_name."','".$safe_department."','".$safe_year_of_study."','".$safe_email."','".$safe_password."','$product')");
-
 if(isset($_POST['submit']))
 {   
     if ($_FILES["image"]["size"] < 1) {
@@ -264,7 +239,6 @@ function saveimage($name,$image)
       echo "<script>alert('Image upload failed.');</script>";
    }
 }
-
 $roll_number=$_POST['roll_number'];
 mkdir($roll_number); 
 $target_path = $roll_number."/"; 
