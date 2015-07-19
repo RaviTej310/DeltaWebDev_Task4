@@ -28,7 +28,7 @@ height: 25px;
 </style>
 </head>
 <body>
-<?php
+<?php session_start();
 error_reporting( error_reporting() & ~E_DEPRECATED );
 $your_nameErr = $emailErr = $passwordErr = $roll_numberErr = $year_of_studyErr = $captchaErr = $departmentErr = "";
 $your_name = $email = $password = $roll_number = $department = $year_of_study = "";
@@ -71,6 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $department = test_input($_POST["department"]);
 	 $safe_department = mysql_real_escape_string($department);
    } 
+   if(isset($_POST["captcha"])&&$_POST["captcha"]!=""&&$_SESSION["code"]==$_POST["captcha"])
+   {}
+   else
+   {
+   die("Wrong Code Entered");
+   }
 }
 function test_input($data) {
    $data = trim($data);
@@ -89,6 +95,9 @@ Email : <span class="error">*<?php echo $emailErr;?></span><input align="center"
 Password : <span class="error">*<?php echo $passwordErr;?></span><input align="center" type="password" name="password" id="password"></input>
 Click to display password<br><br><input type="checkbox" id="check" onclick="checkbox()" style="margin: 0; padding 0;"></input><br><br>
 Photo : <span class="error">*</span><input type="file" name='image' id='image'></input>
+Enter Image Text
+<input name="captcha" type="text">
+<img src="captcha.php" /><br>
 <input align="center" type="submit" name="submit" value="Submit"></input><br>
 <form>
 </div>
